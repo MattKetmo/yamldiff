@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$cli = new Application('YamlDiff', '0.1');
+$cli->add(new \YamlDiff\YamlDiffCommand);
+$cli->run(new \YamlDiff\ArgvInput('yamldiff'));

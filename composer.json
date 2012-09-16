@@ -1,0 +1,21 @@
+{
+    "name": "mattketmo/yamldiff",
+    "description": "Display diff between keys of two Yaml files",
+    "require": {
+        "symfony/console": "2.1.*",
+        "symfony/process": "2.1.*",
+        "symfony/finder": "2.1.*",
+        "symfony/yaml": "2.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "YamlDiff": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matthieu Moquet",
+            "email": "matthieu@moquet.net"
+        }
+    ]
+}
