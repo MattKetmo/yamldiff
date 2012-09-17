@@ -6,7 +6,7 @@ Spot the differences between 2 yaml files.
 
 Download the compiled command:
 
-    curl -O https://github.com/downloads/MattKetmo/yamldiff/yamldiff.phar
+    curl -LO https://github.com/downloads/MattKetmo/yamldiff/yamldiff.phar
 
 Or download the sources and compile it manually:
 
