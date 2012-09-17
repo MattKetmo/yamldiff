@@ -27,8 +27,7 @@ class Compiler
 
         $process = new Process('git log --pretty="%h" -n1 HEAD', __DIR__);
         if (0 !== $process->run()) {
-            throw new \RuntimeException('Can\'t run git log. You must ensure to run compile '.
-                'from composer git repository clone and that git binary is available.');
+            throw new \RuntimeException('Can\'t run git log.');
         }
         $this->version = trim($process->getOutput());
 

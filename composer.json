@@ -1,6 +1,6 @@
 {
     "name": "mattketmo/yamldiff",
-    "description": "Display diff between keys of two Yaml files",
+    "description": "Spot the differences between two YAML files",
     "require": {
         "symfony/console": "2.1.*",
         "symfony/process": "2.1.*",

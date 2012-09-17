@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of YamlDiff.
+ *
+ * (c) Matthieu Moquet <matthieu@moquet.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace YamlDiff;
 
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +20,9 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Yaml\Parser;
 
 /**
- * Make diff between two Yaml files
+ * Make diff between two Yaml files.
+ *
+ * @author Matthieu Moquet <matthieu@moquet.net>
  */
 class YamlDiffCommand extends Command
 {
