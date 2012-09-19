@@ -47,10 +47,18 @@ class YamlDiffCommand extends Command
         $output->getFormatter()->setStyle('add', new OutputFormatterStyle('green'));
         $output->getFormatter()->setStyle('del', new OutputFormatterStyle('red'));
 
-        $yaml = new Parser();
+        $file1 = $input->getArgument('file1');
+        $file2 = $input->getArgument('file2');
+        if (!file_exists($file1)) {
+            throw new \InvalidArgumentException(sprintf('File %s doesn\'t exist', $file1));
+        }
+        if (!file_exists($file2)) {
+            throw new \InvalidArgumentException(sprintf('File %s doesn\'t exist', $file2));
+        }
 
-        $values1 = $yaml->parse(file_get_contents($input->getArgument('file1')));
-        $values2 = $yaml->parse(file_get_contents($input->getArgument('file2')));
+        $yaml = new Parser();
+        $values1 = $yaml->parse(file_get_contents($file1));
+        $values2 = $yaml->parse(file_get_contents($file2));
 
         $values1 = $this->flattenArray($values1);
         $values2 = $this->flattenArray($values2);
