@@ -73,6 +73,8 @@ class YamlDiffCommand extends Command
         foreach ($diff2 as $key => $value) {
             $output->writeln(sprintf('<del>-%s</del>', $key));
         }
+
+        return empty($diff1) && empty($diff2) ? 0 : 1;
     }
 
     /**

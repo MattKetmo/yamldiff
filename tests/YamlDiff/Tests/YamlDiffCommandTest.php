@@ -19,27 +19,30 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testYamlDiff_SameFile()
     {
-        $output = $this->runCommand(__DIR__.'/fixtures/file1.yml', __DIR__.'/fixtures/file1.yml');
+        $returnCode = $this->runCommand('file1.yml', 'file1.yml', $output);
         $this->assertEmpty($output);
+        $this->assertEquals(0, $returnCode);
     }
 
     public function testYamlDiff_MissingParameter()
     {
-        $output = $this->runCommand(__DIR__.'/fixtures/file1.yml', __DIR__.'/fixtures/file2.yml');
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', $output);
         $this->assertContains('+parameters.chuck', $output);
         $this->assertContains('-parameters.john', $output);
+        $this->assertEquals(1, $returnCode);
     }
 
     public function testYamlDiff_ItemCountDoesntMatter()
     {
-        $output = $this->runCommand(__DIR__.'/fixtures/file2.yml', __DIR__.'/fixtures/file3.yml');
+        $returnCode = $this->runCommand('file2.yml', 'file3.yml', $output);
         $this->assertEmpty($output);
+        $this->assertEquals(0, $returnCode);
     }
 
     /**
      * Runs the command and returns it output
      */
-    protected function runCommand($file1, $file2)
+    protected function runCommand($file1, $file2, &$output = null)
     {
         $application = new Application('YamlDiff');
         $application->add(new \YamlDiff\YamlDiffCommand);
@@ -47,14 +50,14 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
 
         $input = new ArrayInput(array(
             'command' => 'yamldiff',
-            'file1'   => $file1,
-            'file2'   => $file2
+            'file1'   => __DIR__.'/fixtures/'.$file1,
+            'file2'   => __DIR__.'/fixtures/'.$file2
         ));
 
         $fp = tmpfile();
         $output = new StreamOutput($fp);
 
-        $application->run($input, $output);
+        $returnCode = $application->run($input, $output);
 
         fseek($fp, 0);
         $output = '';
@@ -63,6 +66,6 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
         }
         fclose($fp);
 
-        return $output;
+        return $returnCode;
     }
 }
