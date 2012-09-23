@@ -1,0 +1,6 @@
+parameters:
+    foo: baz
+    hello: world
+    john:
+      - doe
+      - woo
