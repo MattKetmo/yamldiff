@@ -1,5 +1,7 @@
 # YamlDiff
 
+[![Build Status](https://secure.travis-ci.org/MattKetmo/yamldiff.png)](http://travis-ci.org/MattKetmo/yamldiff)
+
 Spot the differences between 2 yaml files.
 
 ## Installation
