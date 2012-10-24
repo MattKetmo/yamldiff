@@ -12,7 +12,7 @@ Download the compiled command:
 
 Or download the sources and compile it manually:
 
-    git git://github.com/MattKetmo/yamldiff.git
+    git clone git://github.com/MattKetmo/yamldiff.git
     cd yamldiff/
     curl -s https://getcomposer.org/installer | php
     php composer.phar install
