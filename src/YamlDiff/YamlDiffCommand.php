@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Yaml\Parser;
@@ -36,6 +37,7 @@ class YamlDiffCommand extends Command
             ->setDescription('Compare keys between two Yaml files')
             ->addArgument('file1', InputArgument::REQUIRED)
             ->addArgument('file2', InputArgument::REQUIRED)
+            ->addOption('quiet', 'q', InputOption::VALUE_NONE, 'Disable all output of the program.')
         ;
     }
 
@@ -46,6 +48,10 @@ class YamlDiffCommand extends Command
     {
         $output->getFormatter()->setStyle('add', new OutputFormatterStyle('green'));
         $output->getFormatter()->setStyle('del', new OutputFormatterStyle('red'));
+
+        if (true === $input->getOption('quiet')) {
+            $output = new NullOutput();
+        }
 
         $file1 = $input->getArgument('file1');
         $file2 = $input->getArgument('file2');
