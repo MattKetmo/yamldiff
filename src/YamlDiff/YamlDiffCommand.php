@@ -38,6 +38,8 @@ class YamlDiffCommand extends Command
             ->addArgument('file1', InputArgument::REQUIRED)
             ->addArgument('file2', InputArgument::REQUIRED)
             ->addOption('quiet', 'q', InputOption::VALUE_NONE, 'Disable all output of the program.')
+            ->addOption('ignore-extra', null, InputOption::VALUE_NONE, 'Ignore keys present on file2 and missing on file1.')
+            ->addOption('ignore-missing', null, InputOption::VALUE_NONE, 'Ignore keys present on file1 and missing on file2.')
         ;
     }
 
@@ -72,15 +74,29 @@ class YamlDiffCommand extends Command
         $diff1 = array_diff_key($values1, $values2);
         $diff2 = array_diff_key($values2, $values1);
 
-        foreach ($diff1 as $key => $value) {
-            $output->writeln(sprintf('<add>+%s</add>', $key));
+        $returnCode = 0;
+
+        if (false === $input->getOption('ignore-missing')) {
+            if (!empty($diff1)) {
+                $returnCode = 1;
+            }
+
+            foreach ($diff1 as $key => $value) {
+                $output->writeln(sprintf('<add>+%s</add>', $key));
+            }
         }
 
-        foreach ($diff2 as $key => $value) {
-            $output->writeln(sprintf('<del>-%s</del>', $key));
+        if (false === $input->getOption('ignore-extra')) {
+            if (!empty($diff2)) {
+                $returnCode = 1;
+            }
+
+            foreach ($diff2 as $key => $value) {
+                $output->writeln(sprintf('<del>-%s</del>', $key));
+            }
         }
 
-        return empty($diff1) && empty($diff2) ? 0 : 1;
+        return $returnCode;
     }
 
     /**
