@@ -19,30 +19,60 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testYamlDiff_SameFile()
     {
-        $returnCode = $this->runCommand('file1.yml', 'file1.yml', $output);
-        $this->assertEmpty($output);
-        $this->assertEquals(0, $returnCode);
+        $returnCode = $this->runCommand('file1.yml', 'file1.yml', array(), $output);
+        $this->assertEmpty($output, 'There is no output');
+        $this->assertEquals(0, $returnCode, 'Success exit code');
     }
 
     public function testYamlDiff_MissingParameter()
     {
-        $returnCode = $this->runCommand('file1.yml', 'file2.yml', $output);
-        $this->assertContains('+parameters.chuck', $output);
-        $this->assertContains('-parameters.john', $output);
-        $this->assertEquals(1, $returnCode);
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array(), $output);
+        $this->assertContains('+parameters.chuck', $output, 'The key "parameters.chuck" is missing in file2');
+        $this->assertContains('-parameters.john', $output, 'The key "parameters.john" is missing in file1');
+        $this->assertEquals(1, $returnCode, 'Error exit code');
+    }
+
+    public function testYamlDiff_IgnoreExtra()
+    {
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--ignore-extra' => true), $output);
+        $this->assertContains('+parameters.chuck', $output, 'The key "parameters.chuck" is missing');
+        $this->assertNotContains('-parameters.john', $output, 'The command do not show the key missing in file1');
+        $this->assertEquals(1, $returnCode, 'Error exit code');
+    }
+
+    public function testYamlDiff_IgnoreMissing()
+    {
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--ignore-missing' => true), $output);
+        $this->assertNotContains('+parameters.chuck', $output, 'The command do not show the key missing in file2');
+        $this->assertContains('-parameters.john', $output, 'The key "parameters.john" is missing in file1');
+        $this->assertEquals(1, $returnCode, 'Error exit code');
     }
 
     public function testYamlDiff_ItemCountDoesntMatter()
     {
-        $returnCode = $this->runCommand('file2.yml', 'file3.yml', $output);
-        $this->assertEmpty($output);
-        $this->assertEquals(0, $returnCode);
+        $returnCode = $this->runCommand('file2.yml', 'file3.yml', array(), $output);
+        $this->assertEmpty($output, 'There is no output');
+        $this->assertEquals(0, $returnCode, 'Success exit code');
+    }
+
+    public function testYamlDiff_QuietOutput()
+    {
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--quiet' => true), $output);
+        $this->assertEmpty($output, 'There is no output');
+        $this->assertEquals(1, $returnCode, 'Error exit code');
     }
 
     /**
-     * Runs the command and returns it output
+     * Runs the command and returns it exit code
+     *
+     * @param string $file1  First yaml file path
+     * @param string $file2  Second yaml file path
+     * @param string $params Extra parameters (to add options)
+     * @param string $output The output of the command by reference
+     *
+     * @return int Exit code
      */
-    protected function runCommand($file1, $file2, &$output = null)
+    protected function runCommand($file1, $file2, $params = array(), &$output = null)
     {
         $application = new Application('YamlDiff');
         $application->add(new \YamlDiff\YamlDiffCommand);
@@ -52,7 +82,7 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
             'command' => 'yamldiff',
             'file1'   => __DIR__.'/fixtures/'.$file1,
             'file2'   => __DIR__.'/fixtures/'.$file2
-        ));
+        ) + $params);
 
         $fp = tmpfile();
         $output = new StreamOutput($fp);
