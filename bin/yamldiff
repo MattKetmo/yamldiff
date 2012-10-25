@@ -4,7 +4,9 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use YamlDiff\ArgvInput;
+use YamlDiff\YamlDiffCommand;
 
-$cli = new Application('YamlDiff', '0.1');
-$cli->add(new \YamlDiff\YamlDiffCommand);
-$cli->run(new \YamlDiff\ArgvInput('yamldiff'));
+$cli = new Application('YamlDiff', YamlDiffCommand::VERSION);
+$cli->add(new YamlDiffCommand);
+$cli->run(new ArgvInput('yamldiff'));

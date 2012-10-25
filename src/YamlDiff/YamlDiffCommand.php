@@ -27,6 +27,8 @@ use Symfony\Component\Yaml\Parser;
  */
 class YamlDiffCommand extends Command
 {
+    const VERSION = '@package_version@';
+
     /**
      * {@inheritdoc}
      */
