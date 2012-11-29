@@ -18,15 +18,13 @@ use Symfony\Component\Console\Input\ArgvInput as BaseArgvInput;
  */
 class ArgvInput extends BaseArgvInput
 {
-    public function __construct($commandName, array $argv = null, InputDefinition $definition = null)
+    public function __construct()
     {
-        if (null === $argv) {
-            $argv = $_SERVER['argv'];
-        }
+        $argv = $_SERVER['argv'];
 
-        // auto insert command name
-        array_splice($argv, 1, 0, $commandName);
+        // auto insert a blank command name
+        array_splice($argv, 1, 0, '');
 
-        parent::__construct($argv, $definition);
+        parent::__construct($argv);
     }
 }
