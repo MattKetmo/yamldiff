@@ -11,53 +11,77 @@
 
 namespace YamlDiff\Tests;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\StreamOutput;
+use YamlDiff\Application;
+use Symfony\Component\Console\Tester\ApplicationTester;
 
 class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
 {
-    public function testYamlDiff_SameFile()
+    /**
+     * @var ApplicationTester
+     */
+    protected $tester;
+
+    public function setUp()
     {
-        $returnCode = $this->runCommand('file1.yml', 'file1.yml', array(), $output);
+        $application = new Application('YamlDiff');
+        $application->setAutoExit(false);
+
+        $this->tester = new ApplicationTester($application);
+    }
+
+    public function testSameFile()
+    {
+        $returnCode = $this->runCommand('file1.yml', 'file1.yml');
+        $output = $this->tester->getDisplay();
+
         $this->assertEmpty($output, 'There is no output');
         $this->assertEquals(0, $returnCode, 'Success exit code');
     }
 
-    public function testYamlDiff_MissingParameter()
+    public function testMissingParameter()
     {
-        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array(), $output);
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml');
+        $output = $this->tester->getDisplay();
+
         $this->assertContains('+parameters.chuck', $output, 'The key "parameters.chuck" is missing in file2');
         $this->assertContains('-parameters.john', $output, 'The key "parameters.john" is missing in file1');
         $this->assertEquals(1, $returnCode, 'Error exit code');
     }
 
-    public function testYamlDiff_IgnoreExtra()
+    public function testIgnoreExtra()
     {
-        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--ignore-extra' => true), $output);
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--ignore-extra' => true));
+        $output = $this->tester->getDisplay();
+
         $this->assertContains('+parameters.chuck', $output, 'The key "parameters.chuck" is missing');
         $this->assertNotContains('-parameters.john', $output, 'The command do not show the key missing in file1');
         $this->assertEquals(1, $returnCode, 'Error exit code');
     }
 
-    public function testYamlDiff_IgnoreMissing()
+    public function testIgnoreMissing()
     {
-        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--ignore-missing' => true), $output);
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--ignore-missing' => true));
+        $output = $this->tester->getDisplay();
+
         $this->assertNotContains('+parameters.chuck', $output, 'The command do not show the key missing in file2');
         $this->assertContains('-parameters.john', $output, 'The key "parameters.john" is missing in file1');
         $this->assertEquals(1, $returnCode, 'Error exit code');
     }
 
-    public function testYamlDiff_ItemCountDoesntMatter()
+    public function testItemCountDoesntMatter()
     {
-        $returnCode = $this->runCommand('file2.yml', 'file3.yml', array(), $output);
+        $returnCode = $this->runCommand('file2.yml', 'file3.yml');
+        $output = $this->tester->getDisplay();
+
         $this->assertEmpty($output, 'There is no output');
         $this->assertEquals(0, $returnCode, 'Success exit code');
     }
 
-    public function testYamlDiff_QuietOutput()
+    public function testQuietOutput()
     {
-        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--quiet' => true), $output);
+        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--quiet' => true));
+        $output = $this->tester->getDisplay();
+
         $this->assertEmpty($output, 'There is no output');
         $this->assertEquals(1, $returnCode, 'Error exit code');
     }
@@ -68,34 +92,17 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
      * @param string $file1  First yaml file path
      * @param string $file2  Second yaml file path
      * @param string $params Extra parameters (to add options)
-     * @param string $output The output of the command by reference
      *
      * @return int Exit code
      */
-    protected function runCommand($file1, $file2, $params = array(), &$output = null)
+    protected function runCommand($file1, $file2, array $params = array())
     {
-        $application = new Application('YamlDiff');
-        $application->add(new \YamlDiff\YamlDiffCommand);
-        $application->setAutoExit(false);
-
-        $input = new ArrayInput(array(
+        $input = array(
             'command' => 'yamldiff',
             'file1'   => __DIR__.'/fixtures/'.$file1,
             'file2'   => __DIR__.'/fixtures/'.$file2
-        ) + $params);
+        ) + $params;
 
-        $fp = tmpfile();
-        $output = new StreamOutput($fp);
-
-        $returnCode = $application->run($input, $output);
-
-        fseek($fp, 0);
-        $output = '';
-        while (!feof($fp)) {
-            $output = fread($fp, 4096);
-        }
-        fclose($fp);
-
-        return $returnCode;
+        return $this->tester->run($input);
     }
 }
