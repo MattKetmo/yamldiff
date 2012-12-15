@@ -37,7 +37,6 @@ class YamlDiffCommand extends Command
             ->setDescription('Compare keys between two Yaml files')
             ->addArgument('file1', InputArgument::REQUIRED)
             ->addArgument('file2', InputArgument::REQUIRED)
-            ->addOption('quiet', 'q', InputOption::VALUE_NONE, 'Disable all output of the program.')
             ->addOption('ignore-extra', null, InputOption::VALUE_NONE, 'Ignore keys present on file2 and missing on file1.')
             ->addOption('ignore-missing', null, InputOption::VALUE_NONE, 'Ignore keys present on file1 and missing on file2.')
         ;
@@ -50,10 +49,6 @@ class YamlDiffCommand extends Command
     {
         $output->getFormatter()->setStyle('add', new OutputFormatterStyle('green'));
         $output->getFormatter()->setStyle('del', new OutputFormatterStyle('red'));
-
-        if (true === $input->getOption('quiet')) {
-            $output = new NullOutput();
-        }
 
         $file1 = $input->getArgument('file1');
         $file2 = $input->getArgument('file2');

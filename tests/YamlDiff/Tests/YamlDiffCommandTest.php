@@ -74,15 +74,6 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $returnCode, 'Success exit code');
     }
 
-    public function testQuietOutput()
-    {
-        $returnCode = $this->runCommand('file1.yml', 'file2.yml', array('--quiet' => true));
-        $output = $this->tester->getDisplay();
-
-        $this->assertEmpty($output, 'There is no output');
-        $this->assertEquals(1, $returnCode, 'Error exit code');
-    }
-
     /**
      * Runs the command and returns it exit code
      *
