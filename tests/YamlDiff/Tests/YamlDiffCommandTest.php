@@ -11,22 +11,19 @@
 
 namespace YamlDiff\Tests;
 
-use YamlDiff\Application;
-use Symfony\Component\Console\Tester\ApplicationTester;
+use YamlDiff\YamlDiffCommand;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ApplicationTester
+     * @var CommandTester
      */
     protected $tester;
 
     public function setUp()
     {
-        $application = new Application('YamlDiff');
-        $application->setAutoExit(false);
-
-        $this->tester = new ApplicationTester($application);
+        $this->tester = new CommandTester(new YamlDiffCommand());
     }
 
     public function testSameFile()
@@ -98,11 +95,10 @@ class YamlDiffCommandTest extends \PHPUnit_Framework_TestCase
     protected function runCommand($file1, $file2, array $params = array())
     {
         $input = array(
-            'command' => 'yamldiff',
             'file1'   => __DIR__.'/fixtures/'.$file1,
             'file2'   => __DIR__.'/fixtures/'.$file2
         ) + $params;
 
-        return $this->tester->run($input);
+        return $this->tester->execute($input);
     }
 }
