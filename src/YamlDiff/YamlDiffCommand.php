@@ -35,8 +35,8 @@ class YamlDiffCommand extends Command
         $this
             ->setName('yamldiff')
             ->setDescription('Compare keys between two Yaml files')
-            ->addArgument('file1', InputArgument::REQUIRED)
-            ->addArgument('file2', InputArgument::REQUIRED)
+            ->addArgument('file1', InputArgument::REQUIRED, 'Reference YAML file')
+            ->addArgument('file2', InputArgument::REQUIRED, 'Comparison YAML file')
             ->addOption('ignore-extra', null, InputOption::VALUE_NONE, 'Ignore keys present on file2 and missing on file1.')
             ->addOption('ignore-missing', null, InputOption::VALUE_NONE, 'Ignore keys present on file1 and missing on file2.')
         ;
