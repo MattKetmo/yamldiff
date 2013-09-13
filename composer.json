@@ -12,6 +12,7 @@
             "YamlDiff": "src/"
         }
     },
+    "bin": ["bin/yamldiff"],
     "authors": [
         {
             "name": "Matthieu Moquet",
