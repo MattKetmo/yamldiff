@@ -9,32 +9,26 @@ Spot the differences between 2 yaml files.
 
 ## Installation
 
-Download the compiled command:
+Build the PHAR file using [Box Project](http://box-project.org/).
 
-```shell
-curl -LO https://github.com/downloads/MattKetmo/yamldiff/yamldiff.phar
-```
-
-Or download the sources and compile it manually:
-
-```shell
+```bash
+# Fetch the sources
 git clone git://github.com/MattKetmo/yamldiff.git
 cd yamldiff/
-curl -s https://getcomposer.org/installer | php
-php composer.phar install
-./bin/compile
-```
 
-Then move it to your `$PATH`:
+# Install dependencies (see https://getcomposer.org/doc/00-intro.md#globally)
+composer install
 
-```shell
-chmod +x yamldiff.phar
+# Build the Phar (see http://box-project.org/)
+box build
+
+# Move it to your $PATH
 mv yamldiff.phar /usr/local/bin/yamldiff
 ```
 
 ## Usage
 
-```shell
+```bash
 yamldiff file1.yml file2.yml
 ```
 
@@ -45,7 +39,7 @@ For instance, this can be really usefull when comparing your local file
 `parameters.yml` with the versionned one `parameters.yml.dist` on
 a [Symfony](http://symfony.com) project:
 
-```shell
+```bash
 yamldiff app/config/parameters.yml.dist app/config/parameters.yml
 ```
 
