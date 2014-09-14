@@ -1,6 +1,7 @@
 {
     "name": "mattketmo/yamldiff",
     "description": "Spot the differences between two YAML files",
+    "license": "MIT",
     "require": {
         "symfony/console": "<3",
         "symfony/process": "<3",
