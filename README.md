@@ -1,6 +1,7 @@
 # YamlDiff
 
 [![Build status...](https://img.shields.io/travis/MattKetmo/yamldiff.svg?style=flat)](http://travis-ci.org/MattKetmo/yamldiff)
+[![Code quality...](https://img.shields.io/scrutinizer/g/MattKetmo/yamldiff.svg?style=flat)](https://scrutinizer-ci.com/g/MattKetmo/yamldiff/)
 [![License MIT](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/MattKetmo/yamldiff/blob/master/LICENSE)
 [![Packagist](http://img.shields.io/github/tag/MattKetmo/yamldiff.svg?style=flat)](https://packagist.org/packages/mattketmo/email-checker)
 

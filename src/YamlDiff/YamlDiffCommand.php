@@ -53,9 +53,6 @@ class YamlDiffCommand extends Command
         $file1 = $input->getArgument('file1');
         $file2 = $input->getArgument('file2');
 
-        $ignoreMissingOption = $input->getOption('ignore-missing');
-        $ignoreExtraOption = $input->getOption('ignore-extra');
-
         if (!file_exists($file1)) {
             throw new \InvalidArgumentException(sprintf('File %s doesn\'t exist', $file1));
         }
@@ -75,7 +72,7 @@ class YamlDiffCommand extends Command
 
         $returnCode = 0;
 
-        if (!$ignoreMissingOption) {
+        if (!$input->getOption('ignore-missing')) {
             if (!empty($diff1)) {
                 $returnCode = 1;
             }
@@ -85,7 +82,7 @@ class YamlDiffCommand extends Command
             }
         }
 
-        if ($ignoreExtraOption) {
+        if (!$input->getOption('ignore-extra')) {
             if (!empty($diff2)) {
                 $returnCode = 1;
             }
